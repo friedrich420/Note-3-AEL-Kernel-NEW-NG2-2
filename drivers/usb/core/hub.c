@@ -25,6 +25,7 @@
 #include <linux/mutex.h>
 #include <linux/freezer.h>
 #include <linux/usb/otg.h>
+#include <linux/random.h>
 
 #include <asm/uaccess.h>
 #include <asm/byteorder.h>
@@ -2053,6 +2054,18 @@ int usb_new_device(struct usb_device *udev)
 #endif
 	call_battery_notify(udev, 1);
 #endif
+<<<<<<< HEAD
+=======
+
+	if (udev->serial)
+		add_device_randomness(udev->serial, strlen(udev->serial));
+	if (udev->product)
+		add_device_randomness(udev->product, strlen(udev->product));
+	if (udev->manufacturer)
+		add_device_randomness(udev->manufacturer,
+				      strlen(udev->manufacturer));
+
+>>>>>>> 6a395e9... Linux 3.4.6 - 3.4.10
 	device_enable_async_suspend(&udev->dev);
 
 	/*

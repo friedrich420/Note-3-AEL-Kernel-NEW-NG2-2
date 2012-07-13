@@ -2779,6 +2779,7 @@ static void kswapd_try_to_sleep(pg_data_t *pgdat, int order, int classzone_idx)
 		 */
 		set_pgdat_percpu_threshold(pgdat, calculate_normal_threshold);
 
+<<<<<<< HEAD
 		/*
 		 * Compaction records what page blocks it recently failed to
 		 * isolate pages from and skips them in the future scanning.
@@ -2787,6 +2788,8 @@ static void kswapd_try_to_sleep(pg_data_t *pgdat, int order, int classzone_idx)
 		 */
 		reset_isolation_suitable(pgdat);
 
+=======
+>>>>>>> 6a395e9... Linux 3.4.6 - 3.4.10
 		if (!kthread_should_stop())
 			schedule();
 
