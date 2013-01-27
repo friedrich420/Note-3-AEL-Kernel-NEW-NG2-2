@@ -465,8 +465,13 @@ void ping_err(struct sk_buff *skb, int offset, u32 info)
 	int family;
 	struct icmphdr *icmph;
 	struct inet_sock *inet_sock;
+<<<<<<< HEAD
 	int type;
 	int code;
+=======
+	int type = icmp_hdr(skb)->type;
+	int code = icmp_hdr(skb)->code;
+>>>>>>> 088d5c0... Linux 3.4.31 - 3.4.40
 	struct net *net = dev_net(skb->dev);
 	struct sock *sk;
 	int harderr;
