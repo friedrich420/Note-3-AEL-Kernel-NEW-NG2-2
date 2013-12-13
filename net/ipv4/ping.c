@@ -838,12 +838,10 @@ int ping_recvmsg(struct kiocb *iocb, struct sock *sk, struct msghdr *msg,
 		 size_t len, int noblock, int flags, int *addr_len)
 {
 	struct inet_sock *isk = inet_sk(sk);
-<<<<<<< HEAD
 	int family = sk->sk_family;
 	struct sockaddr_in *sin;
 	struct sockaddr_in6 *sin6;
-=======
->>>>>>> 9290491... Linux 3.4.73
+
 	struct sk_buff *skb;
 	int copied, err;
 
@@ -853,7 +851,6 @@ int ping_recvmsg(struct kiocb *iocb, struct sock *sk, struct msghdr *msg,
 	if (flags & MSG_OOB)
 		goto out;
 
-<<<<<<< HEAD
 	if (addr_len) {
 		if (family == AF_INET)
 			*addr_len = sizeof(*sin);
@@ -892,7 +889,6 @@ int ping_recvmsg(struct kiocb *iocb, struct sock *sk, struct msghdr *msg,
 
 	sock_recv_timestamp(msg, sk, skb);
 
-<<<<<<< HEAD
 	/* Copy the address and add cmsg data. */
 	if (family == AF_INET) {
 		sin = (struct sockaddr_in *) msg->msg_name;
