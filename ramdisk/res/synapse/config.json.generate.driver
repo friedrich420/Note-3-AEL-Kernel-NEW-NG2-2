@@ -1,0 +1,83 @@
+#!/system/bin/sh
+
+cat << CTAG
+{
+    name:DRIVERS,
+    elements:[
+	{ SPane:{
+		title:"Intelli-Hotplug",
+		description:"A in-Kernel replacement for Qualcomm_Hotplug_MPDecision, enabling this will disable MPDecision Hotplug.",
+		default:`cat /sys/module/intelli_plug/parameters/intelli_plug_active`,
+	}},
+	{ SCheckBox:{
+		label:"Enable Intelli-Hotplug",
+		action:"default hotplug"
+	}},
+	{ SCheckBox:{
+		label:"Enable Dual Core Mode",
+		description:"Phone will behave like a dual-core",
+		default:`cat /sys/module/intelli_plug/parameters/eco_mode_active`,
+		action:"generic /sys/module/intelli_plug/parameters/eco_mode_active",
+	}},
+	{ SCheckBox:{
+		label:"Enable Strict Mode",
+		description:"ECO Dual core mode, CPU will try to run on one core if possible",
+		default:`cat /sys/module/intelli_plug/parameters/strict_mode_active`,
+		action:"generic /sys/module/intelli_plug/parameters/strict_mode_active",
+	}},
+	{ SPane:{
+		title:"Dynamic FSYNC",
+		description:"While screen is on file sync is disabled, when screen is off a file sync is called to flush all outstanding writes and restore file sync operation as normal."
+	}},
+	{ SCheckBox:{
+		label:"Enable dynamic fsync",
+		default:`cat /sys/kernel/dyn_fsync/Dyn_fsync_active`,
+		action:"generic /sys/kernel/dyn_fsync/Dyn_fsync_active"
+	}},
+	{ SPane:{
+		title:"Powersuspend",
+		description:"Powersuspend driver is a replacement for the early_suspend/late_resume driver."
+	}},
+	{ SCheckBox:{
+		label:"Enable PowerSuspend",
+		default:`cat /sys/kernel/power_suspend/power_suspend_mode`,
+		action:"generic /sys/kernel/power_suspend/power_suspend_mode"
+	}},
+	{ SPane:{
+		title:"CPU_Boost"
+	}},
+	{ SOptionList:{
+		title:"Set Boost Sync frequency",
+		description:" Default is 1190400 MHz ",
+		default:`cat /sys/module/cpu_boost/parameters/sync_threshold`,
+		action:"generic /sys/module/cpu_boost/parameters/sync_threshold",
+		values:[300000, 422400, 652800, 729600, 883200, 960000, 1036800, 1190400, 1267200, 1497600, 1574400, 1728000, 1958400, 2265600,]
+	}},
+	{ SSeekBar:{
+		title:"Set Boost time in milliseconds ",
+		description:" Default is 20.",
+		max:100,
+		min:10,
+		step:10,
+		default:`cat /sys/module/cpu_boost/parameters/boost_ms`,
+		action:"generic /sys/module/cpu_boost/parameters/boost_ms",
+	}},
+	{ SOptionList:{
+		title:"Set input Boost frequency",
+		description:" Default is 0 MHz meaning it will jump in immediately.",
+		default:`cat /sys/module/cpu_boost/parameters/input_boost_freq`,
+		action:"generic /sys/module/cpu_boost/parameters/input_boost_freq",
+		values:[0, 300000, 422400, 652800, 729600, 883200, 960000, 1036800, 1190400, 1267200, 1497600, 1574400, 1728000, 1958400, 2265600,]
+	}},
+	{ SSeekBar:{
+		title:"Set Input_Boost time in milliseconds ",
+		description:" Default is 40.",
+		max:100,
+		min:10,
+		step:10,
+		default:`cat /sys/module/cpu_boost/parameters/input_boost_ms`,
+		action:"generic /sys/module/cpu_boost/parameters/input_boost_ms",
+	}},
+    ]
+}
+CTAG

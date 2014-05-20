@@ -1,0 +1,78 @@
+#!/system/bin/sh
+
+cat << CTAG
+{
+    name:INFO,
+    elements:[
+	{ SPane:{
+		title:"Source",
+		description:"Based on official Samsung SM-N9005 LTE KK Opensource Update7"
+	}},
+	{ SPane:{
+		title:"Build by",
+		description:"UpInTheAir 2014"
+	}},
+	{ SPane:{
+		title:"Special Features",
+		description:" CPU Overclocking & UnderVolting,
+		Faux Sound,
+		MDNIE Display control,
+		MSM Thermal control,
+		Init.d,
+		Selinux Permissive,
+		Led control,
+		GPU control & Overclocking,
+		USB_FastCharge,
+		NTFS, CIFS, ExFat,
+		DynamicFsync,
+		Powersuspend,
+		Synapse,
+		.... "
+	}},
+	{ SPane:{
+		title:"Special Thanks to",
+		description:"civato !! - Wootever - Faux123 - Yank555.lu - myfluxi - imoseyon - angelom - Zancum - CM - AndreiLux - and many others!"
+	}},
+	{ SPane:{
+		title:"Source",
+		description:"Source is available at https://github.com/UpInTheAir "
+	}},
+	{ SPane:{
+		title:"Q&A",
+		description:"Stuck at 1.4 or 1.9 GHz? Disable Powersave in rom settings / Stuck at 1.9GHz after benchmark when I try to change the maximum scaling speed? That is thermal throttle kicking in, give the system a little time / Why is minimum scaling frequency not available? The touch driver controls the minimum scaling frequency."
+	}},
+	{ SLiveLabel:{
+		refresh:10000,
+		action:"default version"
+	}},
+	{ SPane:{
+		title:"Build"
+	}},
+	{ SLiveLabel:{
+		refresh:10000,
+		action:"default build"
+	}},
+	{ SPane:{
+		title:"Baseband"
+	}},
+	{ SLiveLabel:{
+		refresh:10000,
+		action:"default baseband"
+	}},
+	{ SPane:{
+		title:"Bootloader"
+	}},
+	{ SLiveLabel:{
+		refresh:10000,
+		action:"default bootloader"
+	}},
+	{ SPane:{
+		title:"Serial"
+	}},
+	{ SLiveLabel:{
+		refresh:10000,
+		action:"default serial"
+	}},
+    ]
+}
+CTAG

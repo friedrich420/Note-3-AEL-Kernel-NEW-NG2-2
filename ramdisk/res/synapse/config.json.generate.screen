@@ -1,0 +1,110 @@
+#!/system/bin/sh
+
+read() {
+    P=/sys/class/mdnie/mdnie
+    echo $(busybox printf "#%02X%02X%02X\n" $(cat $P/$1))
+}
+
+cat << CTAG
+{
+    name:SCREEN,
+    elements:[
+	{ SPane:{
+		title:"MDNIE control",
+		description:"Mobile digital natural image engine. Samsungs hardware image post-processor, originally developed as part of a concerted effort to improve television picture quality on non-high-definition-televisions."
+	}},
+	{ SCheckBox:{
+		label:"Enable mdnie control",
+		default:`cat /sys/class/mdnie/mdnie/override`,
+		action:"generic /sys/class/mdnie/mdnie/override"
+	}},
+	{ SButton:{
+		label:"Version information",
+		action:"show screen"
+	}},
+	{ SPane:{
+		title:"Black level",
+		description:"Note 3 devices have an issue with the AMOLED controller in which, if individial pixels get power-gated for true black, they occur a latency delay when getting powered on again, resulting in a visible smearing effect. This control slightly increase the black level to reduce this problem, it will also eliminate black crush."
+	}},
+	{ SSeekBar:{
+		title:"Increase black level",
+		max:4,
+		default:`echo $(/res/synapse/actions/screen black)`,
+		weight:0.39,
+		unit:"%",
+		action:"screen black"
+	}},
+	{ SPane:{
+		title:"Color channel"
+	}},
+	{ SColourPicker:{
+		title:"White",
+		default:`echo $(read white)`,
+		action:"screen white"
+	}},
+	{ SColourPicker:{
+		title:"Red",
+		default:`echo $(read red)`,
+		action:"screen red"
+	}},
+	{ SColourPicker:{
+		title:"Green",
+		default:`echo $(read green)`,
+		action:"screen green"
+	}},
+	{ SColourPicker:{
+		title:"Blue",
+		default:`echo $(read blue)`,
+		action:"screen blue"
+	}},
+	{ SColourPicker:{
+		title:"Cyan",
+		default:`echo $(read cyan)`,
+		action:"screen cyan"
+	}},
+	{ SColourPicker:{
+		title:"Magenta",
+		default:`echo $(read magenta)`,
+		action:"screen magenta"
+	}},
+	{ SColourPicker:{
+		title:"Yellow",
+		default:`echo $(read yellow)`,
+		action:"screen yellow"
+	}},
+	{ SButton:{
+		label:"Save settings to init.d script",
+		action:"default screendata"
+	}},
+	{ SPane:{ 
+		title:"Mode",
+		description:"Note: restart Synapse to see the updated color channel values."
+	}},
+	{ SOptionList:{
+		title:"Copy mode",
+		default:`echo $(/res/synapse/actions/default mode)`,
+		action:"default mode",
+		values:[Standard, Natural, Movie,]
+	}},
+	{ SPane:{ 
+		title:"Gamma"
+	}},
+	{ SOptionList:{
+		title:"Set gamma curve",
+		default:`echo $(/res/synapse/actions/default gamma)`,
+		action:"default gamma",
+		values:[Movie, Dynamic,]
+	}},
+	{ SPane:{ 
+		title:"Digital edge enhancement"
+	}},
+	{ SSeekBar:{
+		title:"Sharpen",
+		min:0,
+		max:11,
+		default:`cat /sys/class/mdnie/mdnie/sharpen`,
+		action:"generic /sys/class/mdnie/mdnie/sharpen"
+	}},
+    ]
+}
+CTAG
