@@ -1373,11 +1373,8 @@ static int futex_requeue(u32 __user *uaddr1, unsigned int flags,
 	if (requeue_pi) {
 		/*
 		 * Requeue PI only works on two distinct uaddrs. This
-<<<<<<< HEAD
 		 * check is only valid for private futexec. See below.
-=======
 		 * check is only valid for private futexes. See below.
->>>>>>> b7919f5... Linux 3.4.92
 		 */
 		if (uaddr1 == uaddr2)
 			return -EINVAL;
@@ -1421,11 +1418,8 @@ retry:
 		goto out_put_key1;
 
 	/*
-<<<<<<< HEAD
 	 * The check above which compares uaddrs is not sufficient for 
-=======
 	 * The check above which compares uaddrs is not sufficient for
->>>>>>> b7919f5... Linux 3.4.92
 	 * shared futexes. We need to compare the keys:
 	 */
 	if (requeue_pi && match_futex(&key1, &key2)) {
@@ -2464,11 +2458,8 @@ static int futex_wait_requeue_pi(u32 __user *uaddr, unsigned int flags,
 		goto out_key2;
 
 	/*
-<<<<<<< HEAD
 	 * The check above which compares uaddrs is not sufficient for 
-=======
 	 * The check above which compares uaddrs is not sufficient for
->>>>>>> b7919f5... Linux 3.4.92
 	 * shared futexes. We need to compare the keys:
 	 */
 	if (match_futex(&q.key, &key2)) {
