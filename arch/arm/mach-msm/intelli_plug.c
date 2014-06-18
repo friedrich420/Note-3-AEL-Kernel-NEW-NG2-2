@@ -31,7 +31,7 @@
 #undef DEBUG_INTELLI_PLUG
 
 #define INTELLI_PLUG_MAJOR_VERSION	3
-#define INTELLI_PLUG_MINOR_VERSION	4
+#define INTELLI_PLUG_MINOR_VERSION	5
 
 #define DEF_SAMPLING_MS			(500)
 #define BUSY_SAMPLING_MS		(250)
@@ -233,11 +233,11 @@ static unsigned int calculate_thread_stats(void)
 	unsigned int threshold_size;
 	unsigned int *current_profile;
 
-	if (!eco_mode_active ||
-		!(nr_run_profile_sel == NR_RUN_ECO_MODE_PROFILE)) {
-		current_profile = nr_run_profiles[nr_run_profile_sel];
+	current_profile = nr_run_profiles[nr_run_profile_sel];
+	if (num_possible_cpus() > 2)
 		threshold_size =
 			ARRAY_SIZE(nr_run_thresholds_balance);
+
 #ifdef DEBUG_INTELLI_PLUG
 		pr_info("intelliplug: full mode active!");
 #endif
@@ -247,12 +247,13 @@ static unsigned int calculate_thread_stats(void)
 	}
 	else {
 		current_profile = nr_run_profiles[NR_RUN_ECO_MODE_PROFILE];
+	else
 		threshold_size =
 			ARRAY_SIZE(nr_run_thresholds_eco);
+
 #ifdef DEBUG_INTELLI_PLUG
-		pr_info("intelliplug: eco mode active!");
+		pr_info("intelliplug: full mode active!");
 #endif
-	}
 
 	if (strict_mode_active == 1) {
 		threshold_size =  ARRAY_SIZE(nr_run_thresholds_strict);
