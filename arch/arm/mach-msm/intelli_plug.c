@@ -238,7 +238,6 @@ static unsigned int calculate_thread_stats(void)
 		current_profile = nr_run_profiles[nr_run_profile_sel];
 		threshold_size =
 			ARRAY_SIZE(nr_run_thresholds_balance);
-		nr_fshift = 3;
 #ifdef DEBUG_INTELLI_PLUG
 		pr_info("intelliplug: full mode active!");
 #endif
@@ -250,7 +249,6 @@ static unsigned int calculate_thread_stats(void)
 		current_profile = nr_run_profiles[NR_RUN_ECO_MODE_PROFILE];
 		threshold_size =
 			ARRAY_SIZE(nr_run_thresholds_eco);
-		nr_fshift = 1;
 #ifdef DEBUG_INTELLI_PLUG
 		pr_info("intelliplug: eco mode active!");
 #endif
@@ -264,6 +262,7 @@ static unsigned int calculate_thread_stats(void)
 		pr_info("intelliplug: strict mode active!");
 #endif
 	}
+	nr_fshift = num_possible_cpus() - 1;
 
 	for (nr_run = 1; nr_run < threshold_size; nr_run++) {
 		unsigned int nr_threshold;
@@ -555,6 +554,7 @@ static void __cpuinit intelli_plug_resume(struct power_suspend *handler)
 		num_of_active_cores = 1;
 	else
 		num_of_active_cores = num_possible_cpus();
+	num_of_active_cores = num_possible_cpus();
 
 	for (i = 1; i < num_of_active_cores; i++) {
 		cpu_up(i);
@@ -655,10 +655,13 @@ int __init intelli_plug_init(void)
 		 INTELLI_PLUG_MAJOR_VERSION,
 		 INTELLI_PLUG_MINOR_VERSION);
 
-	if (num_possible_cpus() > 2)
+	if (num_possible_cpus() > 2) {
 		nr_run_hysteresis = NR_RUN_HYSTERESIS_QUAD;
-	else
+		nr_run_profile_sel = 0;
+	} else {
 		nr_run_hysteresis = NR_RUN_HYSTERESIS_DUAL;
+		nr_run_profile_sel = NR_RUN_ECO_MODE_PROFILE;
+	}
 
 	rc = input_register_handler(&intelli_plug_input_handler);
 #ifdef CONFIG_POWERSUSPEND
