@@ -84,10 +84,10 @@
 #else
 #include "f_mtp.c"
 #endif
+#include "f_accessory.c"
 #include "f_hid.h"
 #include "f_hid_android_keyboard.c"
 #include "f_hid_android_mouse.c"
-#include "f_accessory.c"
 #ifdef CONFIG_USB_ANDROID_SAMSUNG_SIDESYNC
 #include "f_conn_gadget.c"
 #endif
@@ -2696,7 +2696,7 @@ functions_store(struct device *pdev, struct device_attribute *attr,
 	char *name;
 	char buf[256], *b;
 	int err;
-	int hid_usb_enabled = NULL;
+	int hid_usb_enabled = 0;
 
 	mutex_lock(&dev->mutex);
 
@@ -2757,7 +2757,7 @@ functions_store(struct device *pdev, struct device_attribute *attr,
 					if (hid_usb.hid_enabled == 1)
 						hid_usb_enabled = 1;
 					else
-						hid_usb_enabled = NULL;
+						hid_usb_enabled = 0;
 				}
 			}
 		}
