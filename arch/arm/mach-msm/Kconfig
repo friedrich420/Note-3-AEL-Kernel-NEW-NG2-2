@@ -1450,7 +1450,6 @@ config SEC_KS01_PROJECT
 	help
 	  Support for Samsung KS01 project.
 
-<<<<<<< HEAD
 config SEC_JS_PROJECT
 	default n
 	bool "Samsung JS project"
@@ -1463,8 +1462,6 @@ config SEC_JSZT_PROJECT
 	help
 	  Support for Samsung JSZT project.
 
-=======
->>>>>>> d922274... Enabled Voltage Control (Credits: Myfluxi and Civato)
 config MACH_H
 	default n
 	bool "Samsung model H"
@@ -1555,7 +1552,6 @@ config SEC_LOCALE_KOR_H
 	default n
 	bool "Samsung H model KOREA"
 
-<<<<<<< HEAD
 config SEC_LOCALE_JPN
 	default n
 	bool "Samsung model JPN"
@@ -1588,8 +1584,6 @@ config MACH_JS01LTEZT
 	help
 	  Support for Samsung JS01LTEZT device.
 
-=======
->>>>>>> d922274... Enabled Voltage Control (Credits: Myfluxi and Civato)
 config MACH_HLTESKT
 	default n
 	bool "Samsung model HLTESKT"

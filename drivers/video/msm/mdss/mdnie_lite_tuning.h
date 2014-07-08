@@ -95,6 +95,12 @@
 #define SIG_MDNIE_BROWSER_TONE3	42
 #endif
 
+#ifdef CONFIG_MDNIE_LITE_CONTROL
+#define MDNIE_VERSION "1.0b by Yank555.lu"
+#define HIJACK_DISABLED	0
+#define HIJACK_ENABLED	1
+#endif
+
 enum SCENARIO {
 	mDNIe_UI_MODE,
 	mDNIe_VIDEO_MODE,
@@ -122,6 +128,9 @@ enum SCENARIO {
 	mDNIe_BROWSER_TONE2,
 	mDNIe_BROWSER_TONE3,
 #endif
+#if defined(CONFIG_MDNIE_LITE_CONTROL)
+	mDNIe_CONTROL_MODE
+#endif
 };
 
 enum BACKGROUND {
@@ -145,9 +154,13 @@ enum ACCESSIBILITY {
     ACCESSIBILITY_OFF,
 	NEGATIVE,
 	COLOR_BLIND,
+<<<<<<< HEAD
 #if defined(CONFIG_FB_MSM_MIPI_SAMSUNG_OCTA_CMD_WQHD_PT_PANEL) || \
 	defined(CONFIG_FB_MSM_MIPI_SAMSUNG_OCTA_CMD_FULL_HD_PT_PANEL) ||\
 	defined(CONFIG_MACH_JS01LTEDCM)
+=======
+#if defined(CONFIG_FB_MSM_MIPI_SAMSUNG_OCTA_CMD_WQHD_PT_PANEL)
+>>>>>>> bb0eb85... mdnie: HIJACK MDNIE Profile v1.0b (Yank555.lu)
 	SCREEN_CURTAIN,
 #endif
 	ACCESSIBILITY_MAX,
@@ -180,3 +193,4 @@ void is_negative_on(void);
 void coordinate_tunning(int x, int y);
 
 #endif /*_MDNIE_LITE_TUNING_H_*/
+

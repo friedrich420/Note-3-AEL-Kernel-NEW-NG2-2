@@ -21,58 +21,58 @@
 
 ////////////////// UI /// /////////////////////
 
-static char SCREEN_CURTAIN_1[] = {
-	//start
+#if defined(CONFIG_MDNIE_LITE_CONTROL)
+char LITE_CONTROL_1[] = {
 	0xEB,
-	0x01, //mdnie_en
-	0x00, //data_width mask 00 000
-	0x32, //scr_roi 1 scr algo_roi 1 algo 00 1 0 00 1 0
-	0x00, //sharpen cc gamma 00 0 0
+	0x01,
+	0x00,
+	0x33,
+	0x00, //4 = sharpen
 };
 
-static char SCREEN_CURTAIN_2[] = {
+char LITE_CONTROL_2[] = {
 	0xEC,
-	0x00, //roi ctrl
-	0x00, //roi0 x start
 	0x00,
-	0x00, //roi0 x end
 	0x00,
-	0x00, //roi0 y start
 	0x00,
-	0x00, //roi0 y end
 	0x00,
-	0x00, //roi1 x strat
 	0x00,
-	0x00, //roi1 x end
 	0x00,
-	0x00, //roi1 y start
 	0x00,
-	0x00, //roi1 y end
 	0x00,
-	0x00, //scr Cr Yb
-	0x00, //scr Rr Bb
-	0x00, //scr Cg Yg
-	0x00, //scr Rg Bg
-	0x00, //scr Cb Yr
-	0x00, //scr Rb Br
-	0x00, //scr Mr Mb
-	0x00, //scr Gr Gb
-	0x00, //scr Mg Mg
-	0x00, //scr Gg Gg
-	0x00, //scr Mb Mr
-	0x00, //scr Gb Gr
-	0x00, //scr Yr Cb
-	0x00, //scr Br Rb
-	0x00, //scr Yg Cg
-	0x00, //scr Bg Rg
-	0x00, //scr Yb Cr
-	0x00, //scr Bb Rr
-	0x00, //scr Wr Wb
-	0x00, //scr Kr Kb
-	0x00, //scr Wg Wg
-	0x00, //scr Kg Kg
-	0x00, //scr Wb Wr
-	0x00, //scr Kb Kr
+	0x00,
+	0x00,
+	0x00,
+	0x00,
+	0x00,
+	0x00,
+	0x00,
+	0x00,
+	0x00,
+	0x00, //18 = cyan_red
+	0xff, //19 = red_red
+	0xff, //20 = cyan_green
+	0x00, //21 = red_green
+	0xff, //22 = cyan_blue
+	0x00, //23 = red_blue
+	0xff, //24 = magenta_red
+	0x00, //25 = green_red
+	0x00, //26 = magenta_green
+	0xff, //27 = green_green
+	0xff, //28 = magenta_blue
+	0x00, //29 = green_blue
+	0xff, //30 = yellow_red
+	0x00, //31 = blue_red
+	0xff, //32 = yellow_green
+	0x00, //33 = blue_green
+	0x00, //34 = yellow_blue
+	0xff, //35 = blue_blue
+	0xff, //36 = white_red
+	0x00, //37 = black_red
+	0xff, //38 = white_green
+	0x00, //39 = black_green
+	0xff, //40 = white_blue
+	0x00, //41 = black_blue
 	0x00, //curve 1 b
 	0x20, //curve 1 a
 	0x00, //curve 2 b
@@ -87,7 +87,7 @@ static char SCREEN_CURTAIN_2[] = {
 	0x1b, //curve 6 a
 	0x02, //curve 7 b
 	0x1b, //curve 7 a
-	0x02, //curve 8 b
+	0x01, //curve 8 b
 	0x1b, //curve 8 a
 	0x09, //curve 9 b
 	0xa6, //curve 9 a
@@ -121,26 +121,26 @@ static char SCREEN_CURTAIN_2[] = {
 	0x20, //curve23 a
 	0x00, //curve24 b
 	0xFF, //curve24 a
-	0x04, //cc r1
-	0x00,
-	0x00, //cc r2
-	0x00,
-	0x00, //cc r3
-	0x00,
-	0x00, //cc g1
-	0x00,
+	0x04, //cc r1 0.08x
+	0x39,
+	0x1f, //cc r2
+	0xd0,
+	0x1f, //cc r3
+	0xf7,
+	0x1f, //cc g1
+	0xe8,
 	0x04, //cc g2
-	0x00,
-	0x00, //cc g3
-	0x00,
-	0x00, //cc b1
-	0x00,
-	0x00, //cc b2
-	0x00,
+	0x21,
+	0x1f, //cc g3
+	0xf7,
+	0x1f, //cc b1
+	0xe8,
+	0x1f, //cc b2
+	0xd0,
 	0x04, //cc b3
-	0x00,
-	//end
+	0x48,
 };
+#endif
 
 static char STANDARD_UI_1[] = {
 	0xEB,
@@ -738,6 +738,7 @@ char AUTO_UI_2[] = {
 };
 
 ////////////////// GALLERY /////////////////////
+
 static char STANDARD_GALLERY_1[] = {
 	0xEB,
 	0x01, //mdnie_en
@@ -4604,7 +4605,6 @@ char *blind_tune_value[ACCESSIBILITY_MAX][2] = {
 		{NULL, NULL},
 		{NEGATIVE_1, NEGATIVE_2},
 		{COLOR_BLIND_1, COLOR_BLIND_2},
-		{SCREEN_CURTAIN_1, SCREEN_CURTAIN_2},
 };
 
 char *mdnie_tune_value[MAX_mDNIe_MODE][MAX_BACKGROUND_MODE][MAX_OUTDOOR_MODE][2] = {
@@ -4706,3 +4706,4 @@ char *mdnie_tune_value[MAX_mDNIe_MODE][MAX_BACKGROUND_MODE][MAX_OUTDOOR_MODE][2]
 };
 
 #endif
+
