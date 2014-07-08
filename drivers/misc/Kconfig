@@ -851,13 +851,6 @@ config NFC_PN547_PMC8974_CLK_REQ
 	  Communication controller support.
 	  This option enables d1 clock for NFC.
 
-config NFC_I2C_OVERWRITE
-	bool "I2C gpio overwrite"
-	depends on I2C
-	default n
-	help
-	  F-project rev09,10 has no external PU register.
-
 config TI_DRV2667
 	tristate "TI's DRV2667 haptic controller support"
 	depends on I2C
@@ -879,3 +872,9 @@ source "drivers/misc/carma/Kconfig"
 source "drivers/misc/altera-stapl/Kconfig"
 source "drivers/misc/modem_if/Kconfig"
 endmenu
+
+config TOUCH_WAKE
+	bool "Support for Touch Wake (Yank555.lu)"
+	default y
+	help
+		Say Y here to enable Touch Wake

@@ -32,6 +32,10 @@
 #endif
 #include <linux/of_gpio.h>
 
+#ifdef CONFIG_TOUCH_WAKE
+#include <linux/touch_wake.h>
+#endif
+
 bool ums_binary;
 unsigned char screen_rotate;
 unsigned char user_hand = 1;
@@ -43,6 +47,10 @@ static struct wacom_features wacom_feature_EMR = {
 	.fw_ic_version = 0x0,
 	.firm_update_status = 0,
 };
+
+#ifdef CONFIG_TOUCH_WAKE
+static struct wacom_i2c *touchwake_pen_data = NULL;
+#endif
 
 static void wacom_enable_irq(struct wacom_i2c *wac_i2c, bool enable)
 {
@@ -141,12 +149,22 @@ static void wacom_i2c_enable(struct wacom_i2c *wac_i2c)
 	bool en = true;
 
 	dev_info(&wac_i2c->client->dev,
-			"%s\n", __func__);
+				"%s\n", __func__);
 
 #ifdef BATTERY_SAVING_MODE
-	if (wac_i2c->battery_saving_mode
-		&& wac_i2c->pen_insert)
+// Always disable digitizer when pen is inserted
+//	if (wac_i2c->battery_saving_mode
+//		&& wac_i2c->pen_insert)
+	if (wac_i2c->pen_insert) {
 		en = false;
+#ifdef CONFIG_TOUCH_WAKE
+		#ifdef TOUCHWAKE_DEBUG_PRINT
+		pr_info("[TOUCHWAKE] Wacom i2c not enabled (pen is inserted)\n");
+	} else {
+		pr_info("[TOUCHWAKE] Wacom i2c enabled (pen not inserted)\n");
+		#endif
+#endif
+	}
 #endif
 
 	if (en) {
@@ -160,17 +178,61 @@ static void wacom_i2c_enable(struct wacom_i2c *wac_i2c)
 
 static void wacom_i2c_disable(struct wacom_i2c *wac_i2c)
 {
-	if (wac_i2c->power_enable) {
-		wacom_enable_irq(wac_i2c, false);
+#ifdef CONFIG_TOUCH_WAKE
+	// Don't change state if touchwake handles this
+	if (!touchwake_is_active()) {
+		#ifdef TOUCHWAKE_DEBUG_PRINT
+		pr_info("[TOUCHWAKE] Wacom i2c disabled\n");
+		#endif
+#endif
+		if (wac_i2c->power_enable) {
+			wacom_enable_irq(wac_i2c, false);
 
-		/* release pen, if it is pressed */
-		if (wac_i2c->pen_pressed || wac_i2c->side_pressed
-			|| wac_i2c->pen_prox)
-			forced_release(wac_i2c);
+			/* release pen, if it is pressed */
+			if (wac_i2c->pen_pressed || wac_i2c->side_pressed
+				|| wac_i2c->pen_prox)
+				forced_release(wac_i2c);
 
-			wac_i2c->wac_pdata->wacom_stop(wac_i2c);
+				wac_i2c->wac_pdata->wacom_stop(wac_i2c);
+		}
+#ifdef CONFIG_TOUCH_WAKE
+	} else {
+		#ifdef TOUCHWAKE_DEBUG_PRINT
+		pr_info("[TOUCHWAKE] Wacom i2c disabling not allowed at the moment\n");
+		#endif
 	}
+#endif
+
 }
+
+#ifdef CONFIG_TOUCH_WAKE
+// Yank555.lu - Add hooks to enable / disable the digitizer for touchwake
+void touchscreen_pen_disable(void)
+{
+	#ifdef TOUCHWAKE_DEBUG_PRINT
+	pr_info("[TOUCHWAKE] Wacom disable\n");
+	#endif
+
+	if (touchwake_pen_data != NULL)
+		wacom_i2c_disable(touchwake_pen_data);
+
+	return;
+}
+EXPORT_SYMBOL(touchscreen_pen_disable);
+
+void touchscreen_pen_enable(void)
+{
+	#ifdef TOUCHWAKE_DEBUG_PRINT
+	pr_info("[TOUCHWAKE] Wacom enable\n");
+	#endif
+
+	if (touchwake_pen_data != NULL)
+		wacom_i2c_enable(touchwake_pen_data);
+
+	return;
+}
+EXPORT_SYMBOL(touchscreen_pen_enable);
+#endif
 
 static irqreturn_t wacom_interrupt(int irq, void *dev_id)
 {
@@ -194,6 +256,14 @@ static irqreturn_t wacom_interrupt_pdct(int irq, void *dev_id)
 	dev_info(&wac_i2c->client->dev, "%s: pdct %d(%d) [%s]\n",
 			__func__, wac_i2c->pen_pdct, wac_i2c->pen_prox,
 			wac_i2c->pen_pdct ? "Released" : "Pressed");
+#ifdef CONFIG_TOUCH_WAKE
+	if (touchwake_is_active() && !wac_i2c->pen_pdct) {
+		#ifdef TOUCHWAKE_DEBUG_PRINT
+		pr_info("[TOUCHWAKE] Wacom Pen pressed\n");
+		#endif
+		touch_press(); // Yank555.lu - Screen touched by pen
+	}
+#endif
 #if 0
 	if (wac_i2c->pen_pdct == PDCT_NOSIGNAL) {
 		/* If rdy is 1, pen is still working*/
@@ -226,8 +296,9 @@ static void pen_insert_work(struct work_struct *work)
 
 #ifdef BATTERY_SAVING_MODE
 	if (wac_i2c->pen_insert) {
-		if (wac_i2c->battery_saving_mode)
-			wacom_i2c_disable(wac_i2c);
+// Always disable digitizer when pen is inserted
+//		if (wac_i2c->battery_saving_mode)
+		wacom_i2c_disable(wac_i2c);
 	} else {
 		wacom_i2c_enable(wac_i2c);
 	}
@@ -911,11 +982,12 @@ static ssize_t epen_saving_mode_store(struct device *dev,
 	dev_info(&wac_i2c->client->dev, "%s: %s\n",
 			__func__, val ? "checked" : "unchecked");
 
-	if (wac_i2c->battery_saving_mode) {
-		if (wac_i2c->pen_insert)
+// Always disable digitizer when pen is inserted
+//	if (wac_i2c->battery_saving_mode) {
+	if (wac_i2c->pen_insert) {
 			wacom_i2c_disable(wac_i2c);
 	} else {
-		if (wac_i2c->enabled)
+//		if (wac_i2c->enabled)
 			wacom_i2c_enable(wac_i2c);
 	}
 	return count;
@@ -1290,15 +1362,11 @@ static int wacom_parse_dt(struct device *dev,
 		"wacom,pen_pdct-gpio", 0, &pdata->pen_pdct_gpio_flags);
 	pdata->gpio_pen_insert = of_get_named_gpio(np, "wacom,sense-gpio", 0);
 
-#if defined(CONFIG_MACH_HLTECHNTWU)
-	pdata->basic_model = "SM-N900U";
-#else
 	rc = of_property_read_string(np, "wacom,basic_model", &pdata->basic_model);
 	if (rc < 0) {
 		dev_info(dev, "%s: Unable to read wacom,basic_model\n", __func__);
 		pdata->basic_model = "NULL";
 	}
-#endif
 
 	rc = of_property_read_u32(np, "wacom,ic_mpu_ver", &pdata->ic_mpu_ver);
 	if (rc < 0)
@@ -1673,6 +1741,12 @@ static int wacom_i2c_probe(struct i2c_client *client,
 	schedule_delayed_work(&wac_i2c->boot_done_work,
 					msecs_to_jiffies(20 * 1000));
 #endif
+#ifdef CONFIG_TOUCH_WAKE
+	// Yank555.lu - Store the data for touchwake
+	touchwake_pen_data = wac_i2c;
+	if (touchwake_pen_data == NULL)
+		pr_err("[TOUCHWAKE] Failed to set Wacom touchwake_pen_data\n");
+#endif 
 
 	return 0;
 
@@ -1776,3 +1850,4 @@ MODULE_AUTHOR("Samsung");
 MODULE_DESCRIPTION("Driver for Wacom G5SP Digitizer Controller");
 
 MODULE_LICENSE("GPL");
+
