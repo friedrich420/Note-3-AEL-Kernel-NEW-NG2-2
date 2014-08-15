@@ -652,9 +652,6 @@ void xhci_shutdown(struct usb_hcd *hcd)
 {
 	struct xhci_hcd *xhci = hcd_to_xhci(hcd);
 
-	if (xhci->quirks && XHCI_SPURIOUS_REBOOT)
-		usb_disable_xhci_ports(to_pci_dev(hcd->self.controller));
-
 	spin_lock_irq(&xhci->lock);
 	xhci_halt(xhci);
 	spin_unlock_irq(&xhci->lock);
@@ -3813,7 +3810,7 @@ int xhci_set_usb2_hardware_lpm(struct usb_hcd *hcd,
 	unsigned int	port_num;
 	unsigned long	flags;
 	int		hird;
-	bool		delay;
+	bool		delay = false;
 
 	if (hcd->speed == HCD_USB3 || !xhci->hw_lpm_support ||
 			!udev->lpm_capable)
@@ -4067,9 +4064,6 @@ int xhci_gen_setup(struct usb_hcd *hcd, xhci_get_quirks_t get_quirks)
 	retval = xhci_reset(xhci);
 	if (retval)
 		goto error;
-
-	if (xhci->quirks & XHCI_RESET_DELAY)
-		usleep_range(350, 1000);
 	xhci_dbg(xhci, "Reset complete\n");
 
 	temp = xhci_readl(xhci, &xhci->cap_regs->hcc_params);
@@ -4135,3 +4129,4 @@ static void __exit xhci_hcd_cleanup(void)
 	xhci_unregister_plat();
 }
 module_exit(xhci_hcd_cleanup);
+

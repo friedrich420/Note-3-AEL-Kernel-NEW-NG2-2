@@ -27,11 +27,8 @@
 
 #include <linux/mmc/mmc.h>
 #include <linux/mmc/host.h>
-<<<<<<< HEAD
-=======
 #include <linux/mmc/card.h>
 
->>>>>>> 6a395e9... Linux 3.4.6 - 3.4.10
 #include <linux/mmc/card.h>
 
 #include "sdhci.h"

@@ -856,18 +856,8 @@ static void handle_channel(struct wiphy *wiphy,
 		    r == -ERANGE)
 			return;
 
-		if (last_request->initiator == NL80211_REGDOM_SET_BY_DRIVER &&
-		    request_wiphy && request_wiphy == wiphy &&
-		    request_wiphy->flags & WIPHY_FLAG_STRICT_REGULATORY) {
-			REG_DBG_PRINT("Disabling freq %d MHz for good\n",
-			chan->center_freq);
-			chan->orig_flags |= IEEE80211_CHAN_DISABLED;
-			chan->flags = chan->orig_flags;
-		} else {
-			REG_DBG_PRINT("Disabling freq %d MHz\n",
-			chan->center_freq);
-			chan->flags |= IEEE80211_CHAN_DISABLED;
-		}
+		REG_DBG_PRINT("Disabling freq %d MHz\n", chan->center_freq);
+		chan->flags = IEEE80211_CHAN_DISABLED;
 		return;
 	}
 
@@ -903,13 +893,6 @@ static void handle_channel(struct wiphy *wiphy,
 	chan->max_reg_power = (int) MBM_TO_DBM(power_rule->max_eirp);
 	if (chan->orig_mpwr) {
 		/*
-<<<<<<< HEAD
-		 * Devices that use NL80211_COUNTRY_IE_FOLLOW_POWER will always
-		 * follow the passed country IE power settings.
-		 */
-		if (initiator == NL80211_REGDOM_SET_BY_COUNTRY_IE &&
-		    wiphy->country_ie_pref & NL80211_COUNTRY_IE_FOLLOW_POWER)
-=======
 		 * Devices that have their own custom regulatory domain
 		 * but also use WIPHY_FLAG_STRICT_REGULATORY will follow the
 		 * passed country IE power settings.
@@ -917,7 +900,6 @@ static void handle_channel(struct wiphy *wiphy,
 		if (initiator == NL80211_REGDOM_SET_BY_COUNTRY_IE &&
 		    wiphy->flags & WIPHY_FLAG_CUSTOM_REGULATORY &&
 		    wiphy->flags & WIPHY_FLAG_STRICT_REGULATORY)
->>>>>>> 6a395e9... Linux 3.4.6 - 3.4.10
 			chan->max_power = chan->max_reg_power;
 		else
 			chan->max_power = min(chan->orig_mpwr,
@@ -1258,8 +1240,7 @@ static void handle_channel_custom(struct wiphy *wiphy,
 			      "wide channel\n",
 			      chan->center_freq,
 			      KHZ_TO_MHZ(desired_bw_khz));
-		chan->orig_flags |= IEEE80211_CHAN_DISABLED;
-		chan->flags = chan->orig_flags;
+		chan->flags = IEEE80211_CHAN_DISABLED;
 		return;
 	}
 
@@ -1336,8 +1317,6 @@ static int ignore_request(struct wiphy *wiphy,
 	case NL80211_REGDOM_SET_BY_CORE:
 		return 0;
 	case NL80211_REGDOM_SET_BY_COUNTRY_IE:
-		if (wiphy->country_ie_pref & NL80211_COUNTRY_IE_IGNORE_CORE)
-			return -EALREADY;
 
 		last_wiphy = wiphy_idx_to_wiphy(last_request->wiphy_idx);
 
@@ -1691,7 +1670,6 @@ int regulatory_hint_user(const char *alpha2)
 
 	return 0;
 }
-EXPORT_SYMBOL(regulatory_hint_user);
 
 /* Driver hints */
 int regulatory_hint(struct wiphy *wiphy, const char *alpha2)
@@ -2161,7 +2139,7 @@ static int __set_regdom(const struct ieee80211_regdomain *rd)
 		 * checking if the alpha2 changes if CRDA was already called
 		 */
 		if (!regdom_changes(rd->alpha2))
-			return -EALREADY;
+			return -EINVAL;
 	}
 
 	/*
@@ -2231,15 +2209,10 @@ static int __set_regdom(const struct ieee80211_regdomain *rd)
 		 * However if a driver requested this specific regulatory
 		 * domain we keep it for its private use
 		 */
-		if (last_request->initiator == NL80211_REGDOM_SET_BY_DRIVER) {
-			const struct ieee80211_regdomain *tmp;
-
-			tmp = request_wiphy->regd;
+		if (last_request->initiator == NL80211_REGDOM_SET_BY_DRIVER)
 			request_wiphy->regd = rd;
-			kfree(tmp);
-		} else {
+		else
 			kfree(rd);
-		}
 
 		rd = NULL;
 
@@ -2286,9 +2259,6 @@ int set_regdom(const struct ieee80211_regdomain *rd)
 	/* Note that this doesn't update the wiphys, this is done below */
 	r = __set_regdom(rd);
 	if (r) {
-		if (r == -EALREADY)
-			reg_set_request_processed();
-
 		kfree(rd);
 		mutex_unlock(&reg_mutex);
 		return r;
@@ -2458,3 +2428,4 @@ void /* __init_or_exit */ regulatory_exit(void)
 	mutex_unlock(&reg_mutex);
 	mutex_unlock(&cfg80211_mutex);
 }
+
