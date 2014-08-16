@@ -43,6 +43,8 @@
 
 #if defined(CONFIG_FB_MSM_MIPI_SAMSUNG_OCTA_CMD_FULL_HD_PT_PANEL) // H
 #include "mdnie_lite_tuning_data_hlte.h"
+#elif defined(CONFIG_FB_MSM_MIPI_SAMSUNG_OCTA_VIDEO_FULL_HD_PT_PANEL) // KS01
+#include "mdnie_lite_tuning_data.h"
 #elif defined(CONFIG_FB_MSM_MIPI_SAMSUNG_YOUM_CMD_FULL_HD_PT_PANEL) // F
 #include "mdnie_lite_tuning_data_flte.h"
 #elif defined(CONFIG_FB_MSM_MIPI_SAMSUNG_OCTA_CMD_WQHD_PT_PANEL) // K
@@ -53,11 +55,11 @@
 #include "mdnie_lite_tuning_data_jactiveltexx.h"
 #elif defined(CONFIG_FB_MSM_MIPI_SAMSUNG_OCTA_VIDEO_WVGA_S6E88A0_PT_PANEL) // ?
 #include "mdnie_lite_tuning_data_wvga_s6e88a0.h"
-*/
-#elif defined(CONFIG_MACH_JS01LTEDCM) // JS01
+#elif defined(CONFIG_MACH_JS01LTEDCM) || defined(CONFIG_MACH_JS01LTESBM) // JS01
 #include "mdnie_lite_tuning_data_js01.h"
+*/
 #else
-#include "mdnie_lite_tuning_data.h"	// KS01
+#include "mdnie_lite_tuning_data.h"
 #endif
 
 #if defined(CONFIG_TDMB)
@@ -160,11 +162,6 @@ const char accessibility_name[ACCESSIBILITY_MAX][20] = {
 	"ACCESSIBILITY_OFF",
 	"NEGATIVE_MODE",
 	"COLOR_BLIND_MODE",
-
-#if defined(CONFIG_FB_MSM_MIPI_SAMSUNG_OCTA_CMD_WQHD_PT_PANEL) || \
-	defined(CONFIG_FB_MSM_MIPI_SAMSUNG_OCTA_CMD_FULL_HD_PT_PANEL) ||\
-	defined(CONFIG_MACH_JS01LTEDCM)
-
 #if defined(CONFIG_FB_MSM_MIPI_SAMSUNG_OCTA_CMD_WQHD_PT_PANEL)
 	"SCREEN_CURTAIN_MODE",
 #endif
@@ -518,7 +515,7 @@ static ssize_t mode_store(struct device *dev,
 	return size;
 }
 
-static DEVICE_ATTR(mode, 0666, mode_show, mode_store);
+static DEVICE_ATTR(mode, 0664, mode_show, mode_store);
 
 static ssize_t scenario_show(struct device *dev,
 					 struct device_attribute *attr,
@@ -1217,38 +1214,38 @@ static ssize_t white_blue_store(struct device * dev, struct device_attribute * a
 	return size;
 }
 
-static DEVICE_ATTR(hijack, 0666, hijack_show, hijack_store);
-static DEVICE_ATTR(curve, 0666, curve_show, curve_store);
-static DEVICE_ATTR(copy_mode, 0222, NULL, copy_mode_store);
-static DEVICE_ATTR(sharpen, 0666, sharpen_show, sharpen_store);
-static DEVICE_ATTR(red_red, 0666, red_red_show, red_red_store);
-static DEVICE_ATTR(red_green, 0666, red_green_show, red_green_store);
-static DEVICE_ATTR(red_blue, 0666, red_blue_show, red_blue_store);
-static DEVICE_ATTR(cyan_red, 0666, cyan_red_show, cyan_red_store);
-static DEVICE_ATTR(cyan_green, 0666, cyan_green_show, cyan_green_store);
-static DEVICE_ATTR(cyan_blue, 0666, cyan_blue_show, cyan_blue_store);
-static DEVICE_ATTR(green_red, 0666, green_red_show, green_red_store);
-static DEVICE_ATTR(green_green, 0666, green_green_show, green_green_store);
-static DEVICE_ATTR(green_blue, 0666, green_blue_show, green_blue_store);
-static DEVICE_ATTR(magenta_red, 0666, magenta_red_show, magenta_red_store);
-static DEVICE_ATTR(magenta_green, 0666, magenta_green_show, magenta_green_store);
-static DEVICE_ATTR(magenta_blue, 0666, magenta_blue_show, magenta_blue_store);
-static DEVICE_ATTR(blue_red, 0666, blue_red_show, blue_red_store);
-static DEVICE_ATTR(blue_green, 0666, blue_green_show, blue_green_store);
-static DEVICE_ATTR(blue_blue, 0666, blue_blue_show, blue_blue_store);
-static DEVICE_ATTR(yellow_red, 0666, yellow_red_show, yellow_red_store);
-static DEVICE_ATTR(yellow_green, 0666, yellow_green_show, yellow_green_store);
-static DEVICE_ATTR(yellow_blue, 0666, yellow_blue_show, yellow_blue_store);
-static DEVICE_ATTR(black, 0666, black_crush_show, black_crush_store);
-static DEVICE_ATTR(black_red, 0666, black_red_show, black_red_store);
-static DEVICE_ATTR(black_green, 0666, black_green_show, black_green_store);
-static DEVICE_ATTR(black_blue, 0666, black_blue_show, black_blue_store);
-static DEVICE_ATTR(white_red, 0666, white_red_show, white_red_store);
-static DEVICE_ATTR(white_green, 0666, white_green_show, white_green_store);
-static DEVICE_ATTR(white_blue, 0666, white_blue_show, white_blue_store);
+static DEVICE_ATTR(hijack, 0664, hijack_show, hijack_store);
+static DEVICE_ATTR(curve, 0664, curve_show, curve_store);
+static DEVICE_ATTR(copy_mode, 0220, NULL, copy_mode_store);
+static DEVICE_ATTR(sharpen, 0664, sharpen_show, sharpen_store);
+static DEVICE_ATTR(red_red, 0664, red_red_show, red_red_store);
+static DEVICE_ATTR(red_green, 0664, red_green_show, red_green_store);
+static DEVICE_ATTR(red_blue, 0664, red_blue_show, red_blue_store);
+static DEVICE_ATTR(cyan_red, 0664, cyan_red_show, cyan_red_store);
+static DEVICE_ATTR(cyan_green, 0664, cyan_green_show, cyan_green_store);
+static DEVICE_ATTR(cyan_blue, 0664, cyan_blue_show, cyan_blue_store);
+static DEVICE_ATTR(green_red, 0664, green_red_show, green_red_store);
+static DEVICE_ATTR(green_green, 0664, green_green_show, green_green_store);
+static DEVICE_ATTR(green_blue, 0664, green_blue_show, green_blue_store);
+static DEVICE_ATTR(magenta_red, 0664, magenta_red_show, magenta_red_store);
+static DEVICE_ATTR(magenta_green, 0664, magenta_green_show, magenta_green_store);
+static DEVICE_ATTR(magenta_blue, 0664, magenta_blue_show, magenta_blue_store);
+static DEVICE_ATTR(blue_red, 0664, blue_red_show, blue_red_store);
+static DEVICE_ATTR(blue_green, 0664, blue_green_show, blue_green_store);
+static DEVICE_ATTR(blue_blue, 0664, blue_blue_show, blue_blue_store);
+static DEVICE_ATTR(yellow_red, 0664, yellow_red_show, yellow_red_store);
+static DEVICE_ATTR(yellow_green, 0664, yellow_green_show, yellow_green_store);
+static DEVICE_ATTR(yellow_blue, 0664, yellow_blue_show, yellow_blue_store);
+static DEVICE_ATTR(black, 0664, black_crush_show, black_crush_store);
+static DEVICE_ATTR(black_red, 0664, black_red_show, black_red_store);
+static DEVICE_ATTR(black_green, 0664, black_green_show, black_green_store);
+static DEVICE_ATTR(black_blue, 0664, black_blue_show, black_blue_store);
+static DEVICE_ATTR(white_red, 0664, white_red_show, white_red_store);
+static DEVICE_ATTR(white_green, 0664, white_green_show, white_green_store);
+static DEVICE_ATTR(white_blue, 0664, white_blue_show, white_blue_store);
 #endif
 
-static DEVICE_ATTR(scenario, 0666, scenario_show, scenario_store);
+static DEVICE_ATTR(scenario, 0664, scenario_show, scenario_store);
 
 static ssize_t mdnieset_user_select_file_cmd_show(struct device *dev,
 						  struct device_attribute *attr,
@@ -1275,7 +1272,7 @@ static ssize_t mdnieset_user_select_file_cmd_store(struct device *dev,
 	return size;
 }
 
-static DEVICE_ATTR(mdnieset_user_select_file_cmd, 0666,
+static DEVICE_ATTR(mdnieset_user_select_file_cmd, 0664,
 		   mdnieset_user_select_file_cmd_show,
 		   mdnieset_user_select_file_cmd_store);
 
@@ -1314,7 +1311,7 @@ static ssize_t mdnieset_init_file_cmd_store(struct device *dev,
 	return size;
 }
 
-static DEVICE_ATTR(mdnieset_init_file_cmd, 0666, mdnieset_init_file_cmd_show,
+static DEVICE_ATTR(mdnieset_init_file_cmd, 0664, mdnieset_init_file_cmd_show,
 		   mdnieset_init_file_cmd_store);
 
 static ssize_t outdoor_show(struct device *dev,
@@ -1360,7 +1357,7 @@ static ssize_t outdoor_store(struct device *dev,
 	return size;
 }
 
-static DEVICE_ATTR(outdoor, 0666, outdoor_show, outdoor_store);
+static DEVICE_ATTR(outdoor, 0664, outdoor_show, outdoor_store);
 
 #if 0 // accessibility
 static ssize_t negative_show(struct device *dev,
@@ -1389,7 +1386,7 @@ static ssize_t negative_store(struct device *dev,
 
 	return size;
 }
-static DEVICE_ATTR(negative, 0666,
+static DEVICE_ATTR(negative, 0664,
 		   negative_show,
 		   negative_store);
 
@@ -1422,7 +1419,7 @@ static ssize_t playspeed_store(struct device *dev,
 	is_play_speed_1_5(value);
 	return size;
 }
-static DEVICE_ATTR(playspeed, 0666,
+static DEVICE_ATTR(playspeed, 0664,
 			playspeed_show,
 			playspeed_store);
 
@@ -1474,12 +1471,7 @@ static ssize_t accessibility_store(struct device *dev,
 		memcpy(&COLOR_BLIND_2[MDNIE_COLOR_BLINDE_OFFSET],
 				buffer, MDNIE_COLOR_BLINDE_CMD);
 	}
-#if defined(CONFIG_FB_MSM_MIPI_SAMSUNG_OCTA_CMD_WQHD_PT_PANEL) || \
-	defined(CONFIG_FB_MSM_MIPI_SAMSUNG_OCTA_CMD_FULL_HD_PT_PANEL) ||\
-	defined(CONFIG_MACH_JS01LTEDCM)
-
 #if defined(CONFIG_FB_MSM_MIPI_SAMSUNG_OCTA_CMD_WQHD_PT_PANEL)
-
 	else if (cmd_value == SCREEN_CURTAIN) {
 		mdnie_tun_state.accessibility = SCREEN_CURTAIN;
 	}
@@ -1499,7 +1491,7 @@ static ssize_t accessibility_store(struct device *dev,
 	return size;
 }
 
-static DEVICE_ATTR(accessibility, 0666,
+static DEVICE_ATTR(accessibility, 0664,
 			accessibility_show,
 			accessibility_store);
 
@@ -1716,16 +1708,16 @@ static ssize_t version_show(struct device *dev, struct device_attribute *attr, c
         return sprintf(buf, "%s\n", MDNIE_VERSION);
 }
 
-static DEVICE_ATTR(control_override, 0666, hijack_show, hijack_store);
-static DEVICE_ATTR(control_sharpen, 0666, sharpen_show, sharpen_store);
-static DEVICE_ATTR(control_red, 0666, red_show, red_store);
-static DEVICE_ATTR(control_green, 0666, green_show, green_store);
-static DEVICE_ATTR(control_blue, 0666, blue_show, blue_store);
-static DEVICE_ATTR(control_cyan, 0666, cyan_show, cyan_store);
-static DEVICE_ATTR(control_magenta, 0666, magenta_show, magenta_store);
-static DEVICE_ATTR(control_yellow, 0666, yellow_show, yellow_store);
-static DEVICE_ATTR(control_white, 0666, white_show, white_store);
-static DEVICE_ATTR(control_black, 0666, black_show, black_store);
+static DEVICE_ATTR(control_override, 0664, hijack_show, hijack_store);
+static DEVICE_ATTR(control_sharpen, 0664, sharpen_show, sharpen_store);
+static DEVICE_ATTR(control_red, 0664, red_show, red_store);
+static DEVICE_ATTR(control_green, 0664, green_show, green_store);
+static DEVICE_ATTR(control_blue, 0664, blue_show, blue_store);
+static DEVICE_ATTR(control_cyan, 0664, cyan_show, cyan_store);
+static DEVICE_ATTR(control_magenta, 0664, magenta_show, magenta_store);
+static DEVICE_ATTR(control_yellow, 0664, yellow_show, yellow_store);
+static DEVICE_ATTR(control_white, 0664, white_show, white_store);
+static DEVICE_ATTR(control_black, 0664, black_show, black_store);
 static DEVICE_ATTR(control_version, 0444, version_show, NULL);
 #endif
 
