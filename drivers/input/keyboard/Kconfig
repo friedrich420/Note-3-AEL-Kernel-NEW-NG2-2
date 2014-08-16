@@ -630,8 +630,4 @@ config SENSORS_HALL
 
 source "drivers/input/keyboard/cypress_touchkey/Kconfig"
 source "drivers/input/keyboard/cypress_touchkey_h/Kconfig"
-<<<<<<< HEAD
 source "drivers/input/keyboard/cypress_touchkey_ks01/Kconfig"
-=======
-source "drivers/input/keyboard/melfas_touchkey/Kconfig"
->>>>>>> dc95042... Linux 3.4.74
