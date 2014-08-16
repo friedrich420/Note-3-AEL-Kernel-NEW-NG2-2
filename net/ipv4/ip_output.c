@@ -1346,7 +1346,6 @@ struct sk_buff *__ip_make_skb(struct sock *sk,
 	iph->ihl = 5;
 	iph->tos = inet->tos;
 	iph->frag_off = df;
-	ip_select_ident(skb, &rt->dst, sk);
 	ip_select_ident(skb, sk);
 	iph->ttl = ttl;
 	iph->protocol = sk->sk_protocol;
@@ -1547,3 +1546,4 @@ void __init ip_init(void)
 	igmp_mc_proc_init();
 #endif
 }
+
