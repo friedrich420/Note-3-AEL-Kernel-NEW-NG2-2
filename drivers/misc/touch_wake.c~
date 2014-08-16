@@ -27,9 +27,6 @@
  * v1.4b: don't use proxy sensor state when suspending to decide whether or not to
  *        enable touchwake & small fixes
  *
- * v1.5 : fix TouchWiz kernel using a different way to turn the synaptics digitizer
- * on/off, finger working fine now
- *
  * --------------------------------------------------------------------------------------
  *
  * Base idea by Ezekeel
