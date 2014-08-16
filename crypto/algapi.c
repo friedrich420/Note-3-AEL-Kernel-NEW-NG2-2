@@ -570,7 +570,7 @@ static struct crypto_template *__crypto_lookup_template(const char *name)
 
 struct crypto_template *crypto_lookup_template(const char *name)
 {
-<<<<<<< HEAD
+
 #ifdef CONFIG_CRYPTO_FIPS
 	if (unlikely(in_fips_err())) {
 		printk(KERN_ERR
@@ -579,10 +579,8 @@ struct crypto_template *crypto_lookup_template(const char *name)
 	}
 #endif
 	return try_then_request_module(__crypto_lookup_template(name), name);
-=======
 	return try_then_request_module(__crypto_lookup_template(name), "%s",
 				       name);
->>>>>>> 8ff0b47... Linux 3.4.51 - 3.4.60
 }
 EXPORT_SYMBOL_GPL(crypto_lookup_template);
 

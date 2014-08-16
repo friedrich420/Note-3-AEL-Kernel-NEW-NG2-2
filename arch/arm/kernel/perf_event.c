@@ -119,11 +119,8 @@ armpmu_map_event(const unsigned (*event_map)[PERF_COUNT_HW_MAX], u64 config)
 	int mapping;
 
 	if (config >= PERF_COUNT_HW_MAX)
-<<<<<<< HEAD
 		return -EINVAL;
-=======
 		return -ENOENT;
->>>>>>> 8ff0b47... Linux 3.4.51 - 3.4.60
 
 	mapping = (*event_map)[config];
 	return mapping == HW_OP_UNSUPPORTED ? -ENOENT : mapping;
@@ -353,10 +350,8 @@ validate_event(struct pmu_hw_events *hw_events,
 	if (is_software_event(event))
 		return 1;
 
-<<<<<<< HEAD
 	if (event->pmu != leader_pmu || event->state <= PERF_EVENT_STATE_OFF)
-=======
->>>>>>> 8ff0b47... Linux 3.4.51 - 3.4.60
+
 	if (event->pmu != leader_pmu || event->state < PERF_EVENT_STATE_OFF)
 		return 1;
 

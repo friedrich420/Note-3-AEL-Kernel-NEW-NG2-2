@@ -1895,13 +1895,9 @@ __acquires(&gcwq->lock)
 	lock_map_acquire_read(&cwq->wq->lockdep_map);
 	lock_map_acquire(&lockdep_map);
 	trace_workqueue_execute_start(work);
-<<<<<<< HEAD
+
 #ifdef CONFIG_SEC_DEBUG
-	secdbg_sched_msg("@%pS", f);
-=======
-#if CONFIG_SEC_DEBUG
 	secdbg_sched_msg("@%pS", worker->current_func);
->>>>>>> 8ff0b47... Linux 3.4.51 - 3.4.60
 #endif
 	worker->current_func(work);
 	/*

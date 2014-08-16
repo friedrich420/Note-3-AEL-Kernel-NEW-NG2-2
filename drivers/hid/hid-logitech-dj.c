@@ -410,9 +410,7 @@ static int logi_dj_recv_send_report(struct dj_receiver_dev *djrcv_dev,
 				    struct dj_report *dj_report)
 {
 	struct hid_device *hdev = djrcv_dev->hdev;
-<<<<<<< HEAD
 	int sent_bytes;
-=======
 	struct hid_report *report;
 	struct hid_report_enum *output_report_enum;
 	u8 *data = (u8 *)(&dj_report->device_index);
@@ -420,7 +418,6 @@ static int logi_dj_recv_send_report(struct dj_receiver_dev *djrcv_dev,
 
 	output_report_enum = &hdev->report_enum[HID_OUTPUT_REPORT];
 	report = output_report_enum->report_id_hash[REPORT_ID_DJ_SHORT];
->>>>>>> 8d2ea0a... Linux 3.4.64
 
 	if (!hdev->hid_output_raw_report) {
 		dev_err(&hdev->dev, "%s:"
@@ -428,14 +425,11 @@ static int logi_dj_recv_send_report(struct dj_receiver_dev *djrcv_dev,
 		return -ENODEV;
 	}
 
-<<<<<<< HEAD
 	sent_bytes = hdev->hid_output_raw_report(hdev, (u8 *) dj_report,
 						 sizeof(struct dj_report),
 						 HID_OUTPUT_REPORT);
-=======
 	for (i = 0; i < DJREPORT_SHORT_LENGTH - 1; i++)
 		report->field[0]->value[i] = data[i];
->>>>>>> 8d2ea0a... Linux 3.4.64
 
 	return (sent_bytes < 0) ? sent_bytes : 0;
 }
