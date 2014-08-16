@@ -1529,11 +1529,8 @@ struct xhci_hcd {
 #define XHCI_RESET_DELAY	(1 << 11)
 #define XHCI_TRUST_TX_LENGTH	(1 << 10)
 #define XHCI_SPURIOUS_REBOOT	(1 << 13)
-<<<<<<< HEAD
-=======
 #define XHCI_COMP_MODE_QUIRK	(1 << 14)
 #define XHCI_AVOID_BEI		(1 << 15)
->>>>>>> 50b5cd4... Linux 3.4.11 - 3.4.20
 	unsigned int		num_active_eps;
 	unsigned int		limit_active_eps;
 	/* There are two roothubs to keep track of bus suspend info for */

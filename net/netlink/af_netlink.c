@@ -1357,11 +1357,8 @@ static int netlink_sendmsg(struct kiocb *kiocb, struct socket *sock,
 		dst_group = ffs(addr->nl_groups);
 		err =  -EPERM;
 		if ((dst_group || dst_pid) &&
-<<<<<<< HEAD
 			!netlink_capable(sock, NL_NONROOT_SEND))
-=======
-		    !netlink_capable(sock, NL_NONROOT_SEND))
->>>>>>> 50b5cd4... Linux 3.4.11 - 3.4.20
+		    	
 			goto out;
 	} else {
 		dst_pid = nlk->dst_pid;

@@ -1759,13 +1759,10 @@ out:
 		unsigned long scan;
 
 		scan = zone_nr_lru_pages(mz, lru);
-<<<<<<< HEAD
+
 		if (sc->priority || noswap || !vmscan_swappiness(sc)) {
 			scan >>= sc->priority;
-=======
-		if (priority || noswap || !vmscan_swappiness(mz, sc)) {
-			scan >>= priority;
->>>>>>> 50b5cd4... Linux 3.4.11 - 3.4.20
+
 			if (!scan && force_scan)
 				scan = SWAP_CLUSTER_MAX;
 			scan = div64_u64(scan * fraction[file], denominator);
