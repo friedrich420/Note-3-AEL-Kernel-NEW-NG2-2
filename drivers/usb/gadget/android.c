@@ -84,10 +84,10 @@
 #else
 #include "f_mtp.c"
 #endif
-#include "f_accessory.c"
 #include "f_hid.h"
 #include "f_hid_android_keyboard.c"
 #include "f_hid_android_mouse.c"
+#include "f_accessory.c"
 #ifdef CONFIG_USB_ANDROID_SAMSUNG_SIDESYNC
 #include "f_conn_gadget.c"
 #endif
@@ -2678,12 +2678,6 @@ functions_show(struct device *pdev, struct device_attribute *attr, char *buf)
 	return buff - buf;
 }
 
-static struct hid_usb_data hid_usb = {
-	.hid_enabled = 0,
-};
-
-module_param_named(usb_keyboard, hid_usb.hid_enabled, uint, 0664);
-
 static ssize_t
 functions_store(struct device *pdev, struct device_attribute *attr,
 			       const char *buff, size_t size)
@@ -2696,7 +2690,7 @@ functions_store(struct device *pdev, struct device_attribute *attr,
 	char *name;
 	char buf[256], *b;
 	int err;
-	int hid_usb_enabled = 0;
+	int hid_enabled;
 
 	mutex_lock(&dev->mutex);
 
@@ -2753,16 +2747,12 @@ functions_store(struct device *pdev, struct device_attribute *attr,
 				if (err)
 					pr_err("android_usb: Cannot enable %s",
 						name);
-				if (!strcmp(name, "hid")) {
-					if (hid_usb.hid_enabled == 1)
-						hid_usb_enabled = 1;
-					else
-						hid_usb_enabled = 0;
-				}
+				if (!strcmp(name, "hid"))
+					hid_enabled = 1;
 			}
 		}
 		/* HID driver always enabled, it's the whole point of this kernel patch */
-		if (hid_usb_enabled)
+		if (hid_enabled)
 			android_enable_function(dev, conf, "hid");
 	}
 
@@ -3259,13 +3249,7 @@ static struct usb_composite_driver android_usb_driver = {
 	.dev		= &device_desc,
 	.strings	= dev_strings,
 	.unbind		= android_usb_unbind,
-#if defined(CONFIG_SEC_LT03_PROJECT) || defined(CONFIG_SEC_MONDRIAN_PROJECT)\
-	|| defined(CONFIG_SEC_KS01_PROJECT) || defined(CONFIG_SEC_PICASSO_PROJECT)\
-	|| defined(CONFIG_SEC_KACTIVE_PROJECT) || defined(CONFIG_SEC_FRESCO_PROJECT)\
-	|| defined(CONFIG_SEC_KSPORTS_PROJECT) || defined(CONFIG_SEC_JACTIVE_PROJECT)\
-	|| defined(CONFIG_SEC_S_PROJECT) || defined(CONFIG_SEC_PATEK_PROJECT)\
-	|| defined(CONFIG_SEC_CHAGALL_PROJECT) || defined(CONFIG_SEC_KLIMT_PROJECT)\
-	|| defined(CONFIG_MACH_JS01LTEDCM)
+#if defined(CONFIG_SEC_LT03_PROJECT) || defined(CONFIG_SEC_MONDRIAN_PROJECT)
 	.max_speed	= USB_SPEED_HIGH
 #else
 	.max_speed	= USB_SPEED_SUPER
@@ -3747,3 +3731,4 @@ static void __exit cleanup(void)
 	platform_driver_unregister(&android_platform_driver);
 }
 module_exit(cleanup);
+
