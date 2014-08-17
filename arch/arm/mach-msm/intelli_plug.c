@@ -91,13 +91,11 @@ module_param(screen_off_max, uint, 0644);
 static unsigned int nr_fshift = NR_FSHIFT;
 module_param(nr_fshift, uint, 0644);
 
-<<<<<<< HEAD
 static unsigned int nr_run_thresholds_full[] = {
 /*	1,  2,  3,  4 - on-line cpus target */
-=======
+
 static unsigned int nr_run_thresholds_balance[] = {
 /* 	1,  2,  3,  4 - on-line cpus target */
->>>>>>> a4ad56f... intelli_plug: add profiles support and misc code optimization
 	5,  7,  9,  UINT_MAX /* avg run threads * 2 (e.g., 9 = 2.25 threads) */
 	};
 
@@ -116,14 +114,13 @@ static unsigned int nr_run_thresholds_eco[] = {
         3,  UINT_MAX /* avg run threads * 2 (e.g., 9 = 2.25 threads) */
         };
 
-<<<<<<< HEAD
 static unsigned int nr_run_thresholds_strict[] = {
 /*	   1, - on-line cpus target */
 	UINT_MAX /* avg run threads *2 (e.g., 9 = 2.25 threads) */
 	};
 
 static unsigned int nr_run_hysteresis = 4;  /* 0.5 thread */
-=======
+
 static unsigned int nr_run_thresholds_disable[] = {
 /* 	1,  2,  3,  4 - on-line cpus target */
 	0,  0,  0,  UINT_MAX /* avg run threads * 2 (e.g., 9 = 2.25 threads) */
@@ -143,7 +140,6 @@ static unsigned int *nr_run_profiles[] = {
 #define NR_RUN_HYSTERESIS_DUAL	4
 
 static unsigned int nr_run_hysteresis = NR_RUN_HYSTERESIS_QUAD;
->>>>>>> a4ad56f... intelli_plug: add profiles support and misc code optimization
 module_param(nr_run_hysteresis, uint, 0644);
 
 static unsigned int nr_run_last;
@@ -215,17 +211,14 @@ static unsigned int calculate_thread_stats(void)
 #ifdef DEBUG_INTELLI_PLUG
 		pr_info("intelliplug: full mode active!");
 #endif
-<<<<<<< HEAD
 	} else {
 		threshold_size =  ARRAY_SIZE(nr_run_thresholds_eco);
 		nr_run_hysteresis = 4;
-=======
 	}
 	else {
 		current_profile = nr_run_profiles[NR_RUN_ECO_MODE_PROFILE];
 		threshold_size =
 			ARRAY_SIZE(nr_run_thresholds_eco);
->>>>>>> a4ad56f... intelli_plug: add profiles support and misc code optimization
 		nr_fshift = 1;
 #ifdef DEBUG_INTELLI_PLUG
 		pr_info("intelliplug: eco mode active!");
@@ -243,16 +236,13 @@ static unsigned int calculate_thread_stats(void)
 
 	for (nr_run = 1; nr_run < threshold_size; nr_run++) {
 		unsigned int nr_threshold;
-<<<<<<< HEAD
 		if (!eco_mode_active && !strict_mode_active)
 			nr_threshold = nr_run_thresholds_full[nr_run - 1];
 		else if (eco_mode_active == 1)
 			nr_threshold = nr_run_thresholds_eco[nr_run - 1];
 		else
 			nr_threshold = nr_run_thresholds_strict[nr_run - 1];
-=======
 		nr_threshold = current_profile[nr_run - 1];
->>>>>>> a4ad56f... intelli_plug: add profiles support and misc code optimization
 
 		if (nr_run_last <= nr_run)
 			nr_threshold += nr_run_hysteresis;
@@ -434,14 +424,11 @@ static void screen_off_limit(bool on)
 
 static void intelli_plug_suspend(struct power_suspend *handler)
 {
-<<<<<<< HEAD
 	int i;
 	int num_of_active_cores = num_possible_cpus();
 
-=======
 	int cpu;
 	
->>>>>>> a4ad56f... intelli_plug: add profiles support and misc code optimization
 	flush_workqueue(intelliplug_wq);
 
 	mutex_lock(&intelli_plug_mutex);
@@ -449,16 +436,13 @@ static void intelli_plug_suspend(struct power_suspend *handler)
 	screen_off_limit(true);
 	mutex_unlock(&intelli_plug_mutex);
 
-<<<<<<< HEAD
 	/* put rest of the cores to sleep! */
 	for (i = num_of_active_cores - 1; i > 0; i--) {
 		cpu_down(i);
-=======
 	// put rest of the cores to sleep!
 	for_each_online_cpu(cpu) {
 		if (cpu != 0)
 			cpu_down(cpu);
->>>>>>> a4ad56f... intelli_plug: add profiles support and misc code optimization
 	}
 }
 
