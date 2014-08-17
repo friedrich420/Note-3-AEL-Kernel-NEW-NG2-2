@@ -37,15 +37,12 @@
 #define DEF_SAMPLING_MS			(500)
 #define BUSY_SAMPLING_MS		(250)
 
-<<<<<<< HEAD
 #define DUAL_CORE_PERSISTENCE		14
 #define TRI_CORE_PERSISTENCE		10
 #define QUAD_CORE_PERSISTENCE		6
-=======
 #define DUAL_PERSISTENCE		7
 #define TRI_PERSISTENCE			5
 #define QUAD_PERSISTENCE		3
->>>>>>> 7cc34d4... intelli_plug: use per cpu nr_runnings stats for unplugging cores
 
 #define BUSY_PERSISTENCE		20
 
@@ -387,13 +384,11 @@ static void __cpuinit intelli_plug_work_fn(struct work_struct *work)
 			case 2:
 				persist_count = DUAL_PERSISTENCE;
 				if (!decision)
-<<<<<<< HEAD
 					persist_count = DUAL_CORE_PERSISTENCE /
 							CPU_DOWN_FACTOR;
-=======
 					persist_count =
 					DUAL_PERSISTENCE / DOWN_FACTOR;
->>>>>>> 7cc34d4... intelli_plug: use per cpu nr_runnings stats for unplugging cores
+
 				if (nr_cpus < 2) {
 					for (i = 1; i < cpu_count; i++)
 						cpu_up(i);
@@ -407,13 +402,11 @@ static void __cpuinit intelli_plug_work_fn(struct work_struct *work)
 			case 3:
 				persist_count = TRI_PERSISTENCE;
 				if (!decision)
-<<<<<<< HEAD
 					persist_count = TRI_CORE_PERSISTENCE /
 							CPU_DOWN_FACTOR;
-=======
 					persist_count =
 					TRI_PERSISTENCE / DOWN_FACTOR;
->>>>>>> 7cc34d4... intelli_plug: use per cpu nr_runnings stats for unplugging cores
+
 				if (nr_cpus < 3) {
 					for (i = 1; i < cpu_count; i++)
 						cpu_up(i);
@@ -427,13 +420,11 @@ static void __cpuinit intelli_plug_work_fn(struct work_struct *work)
 			case 4:
 				persist_count = QUAD_PERSISTENCE;
 				if (!decision)
-<<<<<<< HEAD
 					persist_count = QUAD_CORE_PERSISTENCE /
 							CPU_DOWN_FACTOR;
-=======
 					persist_count =
 					QUAD_PERSISTENCE / DOWN_FACTOR;
->>>>>>> 7cc34d4... intelli_plug: use per cpu nr_runnings stats for unplugging cores
+
 				if (nr_cpus < 4)
 					for (i = 1; i < cpu_count; i++)
 						cpu_up(i);
@@ -499,14 +490,11 @@ static void intelli_plug_suspend(struct power_suspend *handler)
 	screen_off_limit(true);
 	mutex_unlock(&intelli_plug_mutex);
 
-<<<<<<< HEAD
 	/* put rest of the cores to sleep! */
 	for (i = num_of_active_cores - 1; i > 0; i--) {
 		cpu_down(i);
 	// put rest of the cores to sleep!
-=======
 	// put rest of the cores to sleep unconditionally!
->>>>>>> 7cc34d4... intelli_plug: use per cpu nr_runnings stats for unplugging cores
 	for_each_online_cpu(cpu) {
 		if (cpu != 0)
 			cpu_down(cpu);
