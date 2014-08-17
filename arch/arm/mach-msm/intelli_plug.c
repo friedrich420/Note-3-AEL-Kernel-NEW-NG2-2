@@ -58,16 +58,14 @@ module_param(intelli_plug_active, uint, 0644);
 static unsigned int eco_mode_active = 0;
 module_param(eco_mode_active, uint, 0644);
 
-<<<<<<< HEAD
 static unsigned int strict_mode_active = 0;
 module_param(strict_mode_active, uint, 0644);
 
 static unsigned int sampling_time = 0;
-=======
+
 static unsigned int touch_boost_active = 1;
 module_param(touch_boost_active, uint, 0644);
 
->>>>>>> 63a0664... intelli_plug: add parameter to control touch boost on/off
 //default to something sane rather than zero
 static unsigned int sampling_time = DEF_SAMPLING_MS;
 
