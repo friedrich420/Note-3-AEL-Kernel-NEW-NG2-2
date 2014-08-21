@@ -93,7 +93,7 @@ static struct devfreq_simple_ondemand_data adreno_ondemand_data = {
 
 static struct devfreq_msm_adreno_tz_data adreno_tz_data = {
 	.bus = {
-		.max = 578,
+		.max = 600,
 	},
 	.device_id = KGSL_DEVICE_3D0,
 };
@@ -3317,3 +3317,4 @@ MODULE_DESCRIPTION("3D Graphics driver");
 MODULE_VERSION("1.2");
 MODULE_LICENSE("GPL v2");
 MODULE_ALIAS("platform:kgsl_3d");
+
